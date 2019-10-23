@@ -27,7 +27,7 @@ public class Agent {
                     System.out.println(className);
                     ClassReader class_reader = new ClassReader(classfileBuffer);
                     ClassWriter class_writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-                    ClassTransformerVisiter ctransform_visitor = new ClassTransformVisitor(class_writer);
+                    ClassTransformVisitor ctransform_visitor = new ClassTransformVisitor(class_writer);
                     class_reader.accept(ctransform_visitor,0);
                     return class_writer.toByteArray();
                 }
