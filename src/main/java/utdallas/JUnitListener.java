@@ -25,11 +25,11 @@ public class JUnitListener extends RunListener {
         try{
             FileWriter fileWriter = new FileWriter("stmt-cov.txt",true);
             StringBuffer String_buffer = new StringBuffer();
-            for (String testName : CoverageCollection.testSuite.keySet()){
+            for (String testName : CoverageTool.testSuite.keySet()){
                 String_buffer.append(testName + "\n");
-                //Added the Hashmap we discussed in todays meeting 
-                HashMap<String, LinkedHashSet<Integer>> test_view= CoverageCollection.testSuite.get(testName); 
-                
+                //Added the Hashmap we discussed in todays meeting
+                HashMap<String, LinkedHashSet<Integer>> test_view= CoverageTool.testSuite.get(testName);
+
                 //Loop Goes here string buffer will need to append the the key of test_view
             }
         } catch(IOException exception){
