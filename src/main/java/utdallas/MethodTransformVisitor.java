@@ -11,14 +11,22 @@ public class MethodTransformVisitor {
 
 
      /*    * @param mv
-
-
      * @param className
      */
     public MethodTransformVisitor(final MethodVisitor mv, String className) {
-        super(ASM5, mv);
+        super(ASM6, mv);
         this.className = className;
     }
+
+    // method coverage collection
+//    @Override
+//    public void visitCode(){
+//        mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//        mv.visitLdcInsn(mName+" executed");
+//        mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+//        super.visitCode();
+//    }
+
 
     @Override
     public void visitLineNumber(int line, Label start) {
@@ -28,7 +36,7 @@ public class MethodTransformVisitor {
             */
 
             mv.visitLdcInsn(className);
-            mv.visitLdcInsn(new Integer(line));
+            mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
             mv.visitMethodInsn(INVOKESTATIC, "edu/utd/CoverageCollection", "visitLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
             super.visitLineNumber(line, start);
@@ -48,7 +56,6 @@ public class MethodTransformVisitor {
     public void visitEnd() {
         super.visitEnd();
     }
-
 
 
 }
