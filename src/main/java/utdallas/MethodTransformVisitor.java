@@ -4,11 +4,10 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class MethodTransformVisitor {
+public class MethodTransformVisitor extends MethodVisitor implements Opcodes{
 
     private String className;
     private int line;
-
 
      /*    * @param mv
      * @param className
