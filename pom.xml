@@ -36,8 +36,8 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Premain-Class>agent.Agent</Premain-Class>
-                            <Agent-Class>agent.Agent</Agent-Class>
+                            <Premain-Class>utdallas.Agent</Premain-Class>
+                            <Agent-Class>utdallas.Agent</Agent-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
