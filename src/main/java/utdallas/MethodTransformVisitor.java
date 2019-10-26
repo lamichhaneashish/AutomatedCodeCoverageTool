@@ -34,7 +34,7 @@ public class MethodTransformVisitor extends MethodVisitor implements Opcodes{
             mv.visitLdcInsn(mName);
             mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "agent/CollectCoverage", "addCoveredLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "utdallas/CoverageTool", "addCoveredLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
         }
 
         super.visitLineNumber(line, start);
@@ -49,7 +49,7 @@ public class MethodTransformVisitor extends MethodVisitor implements Opcodes{
             mv.visitLdcInsn(mName);
             mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "agent/CollectCoverage", "addCoveredLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "utdallas/CoverageTool", "addCoveredLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
         }
 
         super.visitLabel(label);
