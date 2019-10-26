@@ -12,7 +12,6 @@ public class CoverageTool {
     public static String testName;
 
     public static void addCoveredLine(String name, Integer line) {
-
         // if the the lines covered is empty
         if (linesCovered == null) {
             System.out.println("This is line " + name + "| " + line);
