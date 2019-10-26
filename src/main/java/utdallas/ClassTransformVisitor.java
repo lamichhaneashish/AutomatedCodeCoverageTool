@@ -14,8 +14,10 @@ public class ClassTransformVisitor extends ClassVisitor implements Opcodes {
     @Override
     public void visit(int version, int access, String class_name,String signature,
                       String superName, String[] interfaces){
-        super.visit(version, access, class_name, signature, superName, interfaces);
         this.class_name = class_name;
+        super.visit(version, access, class_name, signature, superName, interfaces);
+
+
     }
 
     @Override

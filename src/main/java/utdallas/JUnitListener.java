@@ -4,23 +4,39 @@ package utdallas;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import org.junit.runner.notification.Failure;
+
 import org.junit.runner.notification.RunListener;
+
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
-
+import sun.tools.asm.Cover;
 
 
 public class JUnitListener extends RunListener {
 
-    public void Started(Description description) throws Exception{
+    public void testRunStarted(Description description) throws Exception{
         System.out.println("start tests \n"); // for checking only. will be deleted from the final build.
-        CoverageTool.testSuite = new HashMap<String, HashMap<String,LinkedHashSet<Integer>>>();
+        if (CoverageTool.testSuite == null){
+            CoverageTool.testSuite = new HashMap<String,HashMap<String,LinkedHashSet<Integer>>>();
+
+        }
     }
 
+    public void testStarted(Description description){
+        System.out.println("\n-----\nStarting - " + description.getMethodName());
+        CoverageTool.testName = "[TEST]" + description.getClassName() + ":" + description.getMethodName();
+        CoverageTool.testCase = new HashMap<String, LinkedHashSet<Integer>>();
+    }
+
+
+    public void testFinished(Description description){
+        System.out.println("Finished - " + description.getMethodName());
+        CoverageTool.testSuite.put(CoverageTool.testName, CoverageTool.testCase);
+    }
     // When test suite finished running.
-    public  void finished(Result result) throws Exception{
+    public  void testRunFinished(Result result) throws Exception{
         System.out.println("finished test run\n");
         try{
             FileWriter fileWriter = new FileWriter("stmt-cov.txt",true);
@@ -42,18 +58,5 @@ public class JUnitListener extends RunListener {
         } catch(IOException exception){
             System.out.println("Logging error : Couldn't Log this.");
         }
-    }
-
-    // A single test starts to run now..
-    public void started(Description description) throws Exception{
-        CoverageTool.testName = "[TEST]" + description.getClassName() + ":" + description.getMethodName();
-        CoverageTool.testCase = new HashMap<String, LinkedHashSet<Integer>>();
-        System.out.println(CoverageTool.testName + "Started\n");
-    }
-
-    // a single test finished running..
-    public void finished(Description description) throws Exception{
-        CoverageTool.testSuite.put(CoverageTool.testName,CoverageTool.testCase);
-        System.out.println(CoverageTool.testName + "finished \n");
     }
 }
