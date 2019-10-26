@@ -14,7 +14,6 @@ public class CoverageTool {
 
         // if the lines covered is empty
         if (testCase == null) {
-
             System.out.println("This is line " + name + "| " + line);
             return;
 
@@ -23,9 +22,9 @@ public class CoverageTool {
         LinkedHashSet covered_lines = testCase.get(name);
         // If linesCovered has no values for the specified class name
         if (covered_lines == null) {
-            int[] new_set = { line };
+            int[] nset = { line };
             System.out.println("This is line " + name + "| " + line);
-            testCase.put(name, new LinkedHashSet(Arrays.asList(new_set)));
+            testCase.put(name, new LinkedHashSet(Arrays.asList(nset)));
             // System.out.println("Putting line number" + line + "in" + name);
         }
 
