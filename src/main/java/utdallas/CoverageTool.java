@@ -7,23 +7,23 @@ import java.util.Set;
 
 public class CoverageTool {
 
-    public static HashMap<String, HashSet> linesCovered;
-    public static HashMap<String, HashMap<String, HashSet>> testCases;
+    public static HashMap<String, HashSet> testSuite;
+    public static HashMap<String, HashMap<String, HashSet>> testCase;
     public static String testName;
 
     public static void addCoveredLine(String name, Integer line) {
         // if the the lines covered is empty
-        if (linesCovered == null) {
+        if (testSuite == null) {
             System.out.println("This is line " + name + "| " + line);
             return;
         }
 
-        HashSet covered_lines = linesCovered.get(name);
+        HashSet covered_lines = testSuite.get(name);
         // If linesCovered has no values for the class name
         if (covered_lines == null) {
             int[] new_set = { line };
             System.out.println("This is line " + name + "| " + line);
-            linesCovered.put(name, new HashSet<>(Arrays.asList(new_set)));
+            testSuite.put(name, new HashSet<>(Arrays.asList(new_set)));
         }
 
         else {
