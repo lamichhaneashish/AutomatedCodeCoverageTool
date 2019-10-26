@@ -1,32 +1,36 @@
 package utdallas;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.HashMap;
+//import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
+//import java.util.Arrays
 
 public class CoverageTool {
-
-    public static HashMap<String, HashSet> testSuite;
-    public static HashMap<String, HashMap<String, HashSet>> testCase;
+    public static HashMap<String, HashMap<String, LinkedHashSet<Integer>>> testSuite;
+    public static HashMap<String, LinkedHashSet<Integer>> testCase;
     public static String testName;
 
     public static void addCoveredLine(String name, Integer line) {
-        // if the the lines covered is empty
-        if (testSuite == null) {
+
+        // if the lines covered is empty
+        if (testCase == null) {
+
             System.out.println("This is line " + name + "| " + line);
             return;
+
         }
 
-        HashSet covered_lines = testSuite.get(name);
-        // If linesCovered has no values for the class name
+        LinkedHashSet covered_lines = testCase.get(name);
+        // If linesCovered has no values for the specified class name
         if (covered_lines == null) {
             int[] new_set = { line };
             System.out.println("This is line " + name + "| " + line);
-            testSuite.put(name, new HashSet<>(Arrays.asList(new_set)));
+            testCase.put(name, new LinkedHashSet(Arrays.asList(new_set)));
+            // System.out.println("Putting line number" + line + "in" + name);
         }
 
         else {
+            // If adding lines to existing linesCovered
             System.out.println("This is line " + name + "| " + line);
             covered_lines.add(line);
         }
