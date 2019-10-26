@@ -31,9 +31,29 @@ public class JUnitListener extends RunListener {
                 HashMap<String, LinkedHashSet<Integer>> test_view= CoverageTool.testSuite.get(testName);
 
                 //Loop Goes here string buffer will need to append the the key of test_view
+                for (String className : test_view.keySet()){
+                    for (Integer i : test_view.get(className)){
+                        String_buffer.append(className+":"+i+"\n");
+                    }
+                }
             }
+            fileWriter.write(String_buffer.toString());
+            fileWriter.close();
         } catch(IOException exception){
             System.out.println("Logging error : Couldn't Log this.");
         }
+    }
+
+    // A single test starts to run now..
+    public void started(Description description) throws Exception{
+        CoverageTool.testName = "[TEST]" + description.getClassName() + ":" + description.getMethodName();
+        CoverageTool.testCase = new HashMap<String, LinkedHashSet<Integer>>();
+        System.out.println(CoverageTool.testName + "Started\n");
+    }
+
+    // a single test finished running..
+    public void finished(Description description) throws Exception{
+        CoverageTool.testSuite.put(CoverageTool.testName,CoverageTool.testCase);
+        System.out.println(CoverageTool.testName + "finished \n");
     }
 }
