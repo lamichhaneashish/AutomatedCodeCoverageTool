@@ -9,7 +9,7 @@ import java.security.ProtectionDomain;
 
 public class Agent {
     public static void premain(String agentArguments, Instrumentation instrumentation){
-        System.out.println("Agent running !!!"); // for checking purpose only.will be deleted in a final build.
+        System.out.println("Agent is running !!!"); // for checking purpose only.will be deleted in a final build.
         instrumentation.addTransformer(new ClassFileTransformer() {
             public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
                 System.out.println("transforming " + className); // checking purpose only

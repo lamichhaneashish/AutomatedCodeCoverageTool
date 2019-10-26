@@ -27,7 +27,7 @@ public class CoverageTool {
         }
 
         else {
-            System.out.println("This is the line " + name + "| " + line);
+            System.out.println("This is line " + name + "| " + line);
             covered_lines.add(line);
         }
     }
