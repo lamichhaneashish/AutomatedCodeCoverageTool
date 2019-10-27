@@ -1,38 +1,55 @@
 package utdallas;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 
+// All the imports
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
+/**
+ * @author Javier Gomez
+ * @author Yugesh Taksari
+ * @author Ashish Lamichhane
+ */
+
 public class Agent {
-    public static void premain(String agentArguments, Instrumentation instrumentation){
-        System.out.println("Agent is running !!!"); // for checking purpose only.will be deleted in a final build.
-        instrumentation.addTransformer(new ClassFileTransformer() {
-            public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
-                System.out.println("transforming " + className); // checking purpose only
-                if (className.startsWith("org/apache/commons/dbutils") ||
-                        className.startsWith("org/joda/time") ||
-                        className.startsWith("com/fasterxml/aalto") ||
-                        className.startsWith("org/neo4j/batchimport") ||
-                        className.startsWith("com/github/vbauer/caesar") ||
-                        className.startsWith("com/vaadin/demo/dashboard") ||
-                        className.startsWith("au/com/ds/ef") ||
-                        className.startsWith("de/apaxo/bedcon") ||
-                        className.startsWith("com/tagtraum/perf/gcviewer") ||
-                        className.startsWith("org/hashids")
-                ){
-                    System.out.println(className);
-                    ClassReader class_reader = new ClassReader(classfileBuffer);
-                    ClassWriter class_writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-                    ClassTransformVisitor ctransform_visitor = new ClassTransformVisitor(class_writer);
-                    class_reader.accept(ctransform_visitor,0);
-                    return class_writer.toByteArray();
-                }
-                return classfileBuffer;
-            }
-        });
+    /**
+     * The premain is a mechanism associated with the java.lang.instrument package, used for loading
+     * our agent that heps in the byte-code manipulation for finding the code coverage of the JUnit Tests.
+     * We are only concerned with the instrumentation and coverage for the classes of the project under test
+     * so the prefix of those classes is used to filter out other classes such as classes belonging to third-party libraries or
+     * Java Internal library.
+     * @param agentArgs : String of arguments.
+     * @param inst : Instrumentation
+     */
+    public static void premain(String agentArgs, Instrumentation inst) {
+        inst.addTransformer(new ClassFileTransformer() {
+            /**
+             * It transforms the classes into the bytecode format.
+             * @param classLoader
+             * @param str
+             * @param aClass
+             * @param protectionDomain
+             * @param bytes
+             * @return
+             * @throws IllegalClassFormatException
+             */
+                                @Override
+                                public byte[] transform(ClassLoader classLoader, String str, Class<?> aClass,
+                                                        ProtectionDomain protectionDomain, byte[] bytes) throws IllegalClassFormatException {
+                                    if (str.startsWith("org/apache/commons/dbutils") == true) {
+                                        System.out.println( "Java Agent is running !!!!" ); // message that the java agent has started running.
+                                        ClassReader reader = new ClassReader(bytes); // its an event producer that parses a compiled class given as a byte array.
+                                        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES); //its an event consumer that produces as output a byte array containing the compiled class.
+                                        ClassTransformVisitor cVisitor = new ClassTransformVisitor(writer); // its an event filter.
+                                        reader.accept(cVisitor, 0);
+                                        return writer.toByteArray();
+                                    }
+                                    return null;
+                                }
+                            }
+        );
     }
 }

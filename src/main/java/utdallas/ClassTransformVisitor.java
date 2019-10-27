@@ -1,30 +1,41 @@
 package utdallas;
 
+// all imports
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.ClassWriter;
+
+/**
+ * @author Javier Gomez
+ * @author Yugesh Taksari
+ * @author Ashish Lamichhane
+ */
+
+/**
+ * Class transform visitor is similar to the one provided by the professor the second HW. No changes has been made in this file.
+ * The MethodVisitor object is created is created that is passed int MethodTransformVisitor class.
+ */
 
 public class ClassTransformVisitor extends ClassVisitor implements Opcodes {
-    private String class_name;
 
-    public ClassTransformVisitor(final ClassVisitor class_visitor){
-        super(ASM6,class_visitor);
+    protected String cName;
+
+    public ClassTransformVisitor(ClassWriter writer) {
+        super(Opcodes.ASM5, writer); // using ASM5.
     }
 
     @Override
-    public void visit(int version, int access, String class_name,String signature,
-                      String superName, String[] interfaces){
-        this.class_name = class_name;
-        super.visit(version, access, class_name, signature, superName, interfaces);
-
-
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        this.cName = name;
+        super.visit(version, access, name, signature, superName, interfaces);
     }
 
     @Override
-    public MethodVisitor visitMethod(final int access, final String m_name, final String desc, final String signature, final String[] exceptions){
-        MethodVisitor methodVisitor = cv.visitMethod(access, m_name, desc, signature, exceptions);
-        return methodVisitor == null ? null : new MethodTransformVisitor(methodVisitor,class_name);
+    public MethodVisitor visitMethod(final int access, final String name,
+                                     final String desc, final String signature, final String[] exceptions) {
+        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);
+        return mv == null ? null : new MethodTransformVisitor(mv, cName);
     }
-
 
 }

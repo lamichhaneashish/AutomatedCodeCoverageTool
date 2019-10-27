@@ -1,62 +1,95 @@
 package utdallas;
 
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.junit.runner.notification.RunListener;
-
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
-import sun.tools.asm.Cover;
+import org.junit.runner.notification.RunListener;
 
+import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+
+/**
+ * @author Javier Gomez
+ * @author Yugesh Taksari
+ * @author Ashish Lamichhane
+ */
+
+/**
+ * JUnitListener captures the start and end events for each JUnit test method,
+ * so that we can start recording when the test starts and stop recording when the test ends.
+ * JUnit RunListener provides a direct way to do that that is integrated in the pom.xml file instead of creating
+ * a separate RunListener.
+ */
 
 public class JUnitListener extends RunListener {
 
-    public void testRunStarted(Description description) throws Exception{
-        System.out.println("start tests \n"); // for checking only. will be deleted from the final build.
-        if (CoverageTool.testSuite == null){
-            CoverageTool.testSuite = new HashMap<String,HashMap<String,LinkedHashSet<Integer>>>();
-
+    /**
+     * This is run whenever a test suite starts to run.
+     * A HashMap for a single test suite is created if it is not currently present.
+     * @param description_info
+     * @throws Exception
+     */
+    public void testRunStarted(Description description_info) throws Exception
+    {
+        if (CoverageCollection.testSuite == null) {
+            CoverageCollection.testSuite = new HashMap<String, HashMap<String, IntLinkedOpenHashSet>>();
         }
     }
 
-    public void testStarted(Description description){
-        System.out.println("\n-----\nStarting - " + description.getMethodName());
-        CoverageTool.testName = "[TEST]" + description.getClassName() + ":" + description.getMethodName();
-        CoverageTool.testCase = new HashMap<String, LinkedHashSet<Integer>>();
+    /**
+     * This is run whenever a test case starts to run.
+     * Here The full test class name prefixed by "[TEST] is created as well as testCases, a HashMap to store information about
+     * lines covered is also created.
+     * @param description_info
+     */
+    public void testStarted(Description description_info)
+    {
+        CoverageCollection.testClassName = "[TEST]" + description_info.getClassName() + ":" + description_info.getMethodName();
+        CoverageCollection.testCases = new HashMap<String, IntLinkedOpenHashSet>();
     }
 
-
-    public void testFinished(Description description){
-        System.out.println("Finished - " + description.getMethodName());
-        CoverageTool.testSuite.put(CoverageTool.testName, CoverageTool.testCase);
+    /**
+     * This is run whenever a test case has finished running.
+     * In this case, teh coverage information is passed into a testsuite HashMap.
+     * @param description_info
+     */
+    public void testFinished(Description description_info)
+    {
+        CoverageCollection.testSuite.put( CoverageCollection.testClassName, CoverageCollection.testCases);
     }
-    // When test suite finished running.
-    public  void testRunFinished(Result result) throws Exception{
-        System.out.println("finished test run\n");
-        try{
-            FileWriter fileWriter = new FileWriter("stmt-cov.txt",true);
-            StringBuffer String_buffer = new StringBuffer();
-            for (String testName : CoverageTool.testSuite.keySet()){
-                String_buffer.append(testName + "\n");
-                //Added the Hashmap we discussed in todays meeting
-                HashMap<String, LinkedHashSet<Integer>> test_view= CoverageTool.testSuite.get(testName);
 
-                //Loop Goes here string buffer will need to append the the key of test_view
-                for (String className : test_view.keySet()){
-                    for (Integer i : test_view.get(className)){
-                        String_buffer.append(className+":"+i+"\n");
-                    }
+    /**
+     * This is run whenever a test suite has finished running. In this case, a new file is created called "stmt-cov.txt" and all information
+     * collected so far is dumped into that file. The test suite HashMap's key is same to the testCase HashMap key to first dump information
+     * about test class full name and the test method name followed by test class full name and line numbers covered by that test case.
+     * @param result
+     * @throws IOException
+     */
+    public void testRunFinished(Result result) throws IOException {
+
+        File output_file = new File("stmt-cov.txt");
+        StringBuilder result_string = new StringBuilder();
+        FileOutputStream output_stream = new FileOutputStream(output_file);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output_stream));
+
+        for (String testCaseName : CoverageCollection.testSuite.keySet())
+        {
+            result_string.append(testCaseName + "\n");
+            HashMap<String, IntLinkedOpenHashSet> caseCoverage = CoverageCollection.testSuite.get(testCaseName);
+            for (String cName : caseCoverage.keySet())
+            {
+                int[] lines = caseCoverage.get(cName).toIntArray();
+                Arrays.sort(lines); // lines are sorted before dumping into the file.
+                for (int line : lines)
+                {
+                    result_string.append(cName + ":" + line + "\n");
                 }
             }
-            fileWriter.write(String_buffer.toString());
-            fileWriter.close();
-        } catch(IOException exception){
-            System.out.println("Logging error : Couldn't Log this.");
         }
+
+        bw.write(result_string.toString());
+        bw.close();
     }
+
 }
