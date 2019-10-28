@@ -18,11 +18,8 @@ In the pom.xml of the project under test add the following lines :
  </dependency>
  </dependencies>
  
-2. Add the javaagent :
-
-<build>
-  <plugins>
-           <plugin>
+2. Add the javaagent in the plugin :
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
@@ -38,8 +35,8 @@ In the pom.xml of the project under test add the following lines :
           </excludes>
         </configuration>
       </plugin>
-  </plugins>
-  </build>
+
+<< This part has already been added to our pom files for our observed projects>>
     
  
 
