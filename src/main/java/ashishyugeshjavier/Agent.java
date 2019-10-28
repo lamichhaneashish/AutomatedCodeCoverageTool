@@ -39,7 +39,11 @@ public class Agent {
                                 @Override
                                 public byte[] transform(ClassLoader classLoader, String str, Class<?> aClass,
                                                         ProtectionDomain protectionDomain, byte[] bytes) throws IllegalClassFormatException {
-                                    if (str.startsWith("org/apache/commons/dbutils") == true) {
+                                    // All 10 projects that were tested using the tool for their coverage details.
+                                    if (str.startsWith("org/apache/commons/dbutils") == true || str.startsWith("com/jakewharton/byteunits") == true ||
+               str.startsWith("com/googlecode/charts4j") == true || str.startsWith("au/com/ds/ef") == true || str.startsWith("com/warrenstrange/googleauth") == true ||
+               str.startsWith("com/offbytwo/iclojure") == true || str.startsWith("de/komoot/photon") == true || str.startsWith("com/cloudhopper/smpp") == true || 
+               str.startsWith("org/atteo/evo/inflector") == true || str.startsWith("org/webbit") == true){
                                         System.out.println( "Java Agent is running !!!!" ); // message that the java agent has started running.
                                         ClassReader reader = new ClassReader(bytes); // its an event producer that parses a compiled class given as a byte array.
                                         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES); //its an event consumer that produces as output a byte array containing the compiled class.
