@@ -11,7 +11,7 @@ In the pom.xml of the project under test add the following lines :
 
 1. Add the dependency:
 <dependencies>  
- <dependency>
+  <dependency>
   <groupId>ASMCC</groupId>
   <artifactId>ashishyugeshjavier</artifactId>
   <version>0.0.1-SNAPSHOT</version>
