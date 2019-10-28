@@ -1,4 +1,4 @@
-package utdallas;
+package ashishyugeshjavier;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -33,7 +33,7 @@ class MethodTransformVisitor extends MethodVisitor implements Opcodes {
             mv.visitLdcInsn(mName);
             mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "utdallas/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "ashishyugeshjavier/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
         }
         super.visitLineNumber(line, start);
     }
@@ -44,7 +44,7 @@ class MethodTransformVisitor extends MethodVisitor implements Opcodes {
             mv.visitLdcInsn(mName);
             mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "utdallas/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "ashishyugeshjavier/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
         }
         super.visitLabel(label);
     }

@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>CS4367GroupProject</groupId>
-    <artifactId>utdallas</artifactId>
+    <groupId>ASMCC</groupId>
+    <artifactId>ashishyugeshjavier</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -37,8 +37,8 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Premain-Class>utdallas.Agent</Premain-Class>
-                            <Agent-Class>utdallas.Agent</Agent-Class>
+                            <Premain-Class>ashishyugeshjavier.Agent</Premain-Class>
+                            <Agent-Class>ashishyugeshjavier.Agent</Agent-Class>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
@@ -59,7 +59,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>utdallas.org.objectweb.asm</shadedPattern>
+                                    <shadedPattern>ashishyugeshjavier.org.objectweb.asm</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
