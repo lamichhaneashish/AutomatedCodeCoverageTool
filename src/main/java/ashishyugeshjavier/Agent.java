@@ -1,21 +1,19 @@
 package ashishyugeshjavier;
 
-// All the imports
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 /**
  * @author Javier Gomez
  * @author Yugesh Taksari
  * @author Ashish Lamichhane
  */
-
 public class Agent {
-    /**
+	   /**
      * The premain is a mechanism associated with the java.lang.instrument package, used for loading
      * our agent that heps in the byte-code manipulation for finding the code coverage of the JUnit Tests.
      * We are only concerned with the instrumentation and coverage for the classes of the project under test
@@ -24,9 +22,9 @@ public class Agent {
      * @param agentArgs : String of arguments.
      * @param inst : Instrumentation
      */
-    public static void premain(String agentArgs, Instrumentation inst) {
-        inst.addTransformer(new ClassFileTransformer() {
-            /**
+	public static void premain(String agentArgs, Instrumentation inst){
+        inst.addTransformer( new ClassFileTransformer() {
+        	 /**
              * It transforms the classes into the bytecode format.
              * @param classLoader
              * @param str
@@ -36,24 +34,18 @@ public class Agent {
              * @return
              * @throws IllegalClassFormatException
              */
-                                @Override
-                                public byte[] transform(ClassLoader classLoader, String str, Class<?> aClass,
-                                                        ProtectionDomain protectionDomain, byte[] bytes) throws IllegalClassFormatException {
-                                    // All 10 projects that were tested using the tool for their coverage details.
-                                    if (str.startsWith("org/apache/commons/dbutils") == true || str.startsWith("com/jakewharton/byteunits") == true ||
-               str.startsWith("com/googlecode/charts4j") == true || str.startsWith("au/com/ds/ef") == true || str.startsWith("com/warrenstrange/googleauth") == true ||
-               str.startsWith("com/offbytwo/iclojure") == true || str.startsWith("de/komoot/photon") == true || str.startsWith("com/cloudhopper/smpp") == true || 
-               str.startsWith("org/atteo/evo/inflector") == true || str.startsWith("org/webbit") == true){
-                                        System.out.println( "Java Agent is running !!!!" ); // message that the java agent has started running.
-                                        ClassReader reader = new ClassReader(bytes); // its an event producer that parses a compiled class given as a byte array.
-                                        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES); //its an event consumer that produces as output a byte array containing the compiled class.
-                                        ClassTransformVisitor cVisitor = new ClassTransformVisitor(writer); // its an event filter.
-                                        reader.accept(cVisitor, 0);
-                                        return writer.toByteArray();
-                                    }
-                                    return null;
-                                }
-                            }
-        );
+           public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+        	   if (className.startsWith( "org/apache/commons/dbutils" ) || className.startsWith("org/joda/time") || className.startsWith("project")){
+//        	        System.out.println("Java Agent has started !!!");
+                	ClassReader classReader = new ClassReader(classfileBuffer);
+                    ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+                    ClassTransformVisitor classVisitor = new ClassTransformVisitor(classWriter);
+                    classReader.accept( classVisitor,0 );
+                    return classWriter.toByteArray();
+                }
+                return new byte[0];
+            }
+        } );
     }
+
 }
