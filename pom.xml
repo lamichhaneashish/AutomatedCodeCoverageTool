@@ -1,84 +1,108 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
+  <modelVersion>4.0.0</modelVersion>
     <groupId>ASMCC</groupId>
     <artifactId>ashishyugeshjavier</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  
+      <properties>
+            <maven.compiler.release>11</maven.compiler.release>
     </properties>
+  
+  <dependencies>
+	  <dependency>
+		  <groupId>org.ow2.asm</groupId>
+		  <artifactId>asm</artifactId>
+		  <version>7.0</version>
+	  </dependency>
+	  
+	 <!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.12</version>
+		</dependency>
+  </dependencies>
+  
+   <build>
+        <pluginManagement>
+            <plugins>
+              <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+				  <archive>
+				  	<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+				    <manifest>
+				    <addClasspath>true</addClasspath>
+					<mainClass>group2.Agent</mainClass>
+					<classpathPrefix>dependency-jars/</classpathPrefix>
+				    </manifest>
+				    <manifestEntries>
+						<Premain-Class>group2.Agent</Premain-Class>
+						<Agent-Class>group2.Agent</Agent-Class>
+						<Can-Retransform-Classes>true</Can-Retransform-Classes>
+					</manifestEntries>
+				  </archive>
+				</configuration>
+    		</plugin>
+    		
+    		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+				  <execution>
+					<id>copy-dependencies</id>
+					<phase>package</phase>
+					<goals>
+					    <goal>copy-dependencies</goal>
+					</goals>
+					<configuration>
+					    <outputDirectory>
+			                          ${project.build.directory}/dependency-jars/
+			                    </outputDirectory>
+					</configuration>
+				    </execution>
+				</executions>
+ 		  </plugin>
+    		
+    		
+    		<plugin>
+                    <!--Using maven compiler 3.8.1-->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <release>11</release>
+                    </configuration>
+                </plugin>
+                
+                <plugin>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <relocations>
+                                        <relocation>
+                                            <pattern>org.objectweb.asm</pattern>
+                                            <shadedPattern>group2.org.objectweb.asm</shadedPattern>
+                                        </relocation>
+                                    </relocations>
+                                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-        <dependency>
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-            <version>7.1.0</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Premain-Class>ashishyugeshjavier.Agent</Premain-Class>
-                            <Agent-Class>ashishyugeshjavier.Agent</Agent-Class>
-                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
-                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>ashishyugeshjavier.org.objectweb.asm</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-        </plugins>
+            </plugins>
+        </pluginManagement>
     </build>
-
+  
 </project>
