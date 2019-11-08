@@ -36,12 +36,12 @@
 				  	<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
 				    <manifest>
 				    <addClasspath>true</addClasspath>
-					<mainClass>group2.Agent</mainClass>
+					<mainClass>ASMCC.Agent</mainClass>
 					<classpathPrefix>dependency-jars/</classpathPrefix>
 				    </manifest>
 				    <manifestEntries>
-						<Premain-Class>group2.Agent</Premain-Class>
-						<Agent-Class>group2.Agent</Agent-Class>
+						<Premain-Class>ASMCC.Agent</Premain-Class>
+						<Agent-Class>ASMCC.Agent</Agent-Class>
 						<Can-Retransform-Classes>true</Can-Retransform-Classes>
 					</manifestEntries>
 				  </archive>
@@ -92,7 +92,7 @@
                                     <relocations>
                                         <relocation>
                                             <pattern>org.objectweb.asm</pattern>
-                                            <shadedPattern>group2.org.objectweb.asm</shadedPattern>
+                                            <shadedPattern>ASMCC.org.objectweb.asm</shadedPattern>
                                         </relocation>
                                     </relocations>
                                     <createDependencyReducedPom>false</createDependencyReducedPom>
