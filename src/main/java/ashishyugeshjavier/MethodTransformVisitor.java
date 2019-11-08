@@ -17,35 +17,45 @@ import org.objectweb.asm.Opcodes;
  */
 class MethodTransformVisitor extends MethodVisitor implements Opcodes {
 
-    String mName; // to store the class name.
-    int line; // line number
 
-    public MethodTransformVisitor(final MethodVisitor mv, String name) {
-        super(ASM5, mv);
-        this.mName = name;
+    private String cName;
+    private int line;
+
+    /**
+     * Since we only care the className not the methodName in this project.
+     * so we input the className
+     * @param mv
+     * @param className
+     */
+    public MethodTransformVisitor(final MethodVisitor mv, String className) {
+        super(ASM7, mv);
+        this.cName = className;
     }
 
-    // statement coverage collection
+
+    @Override
+    public void visitLabel(Label arg0) {
+        mv.visitLdcInsn(this.cName);
+        mv.visitLdcInsn(this.line);
+        mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
+        mv.visitMethodInsn(INVOKESTATIC, "group2/CoverageCollection", "visitLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+        super.visitLabel(arg0);
+    }
+
     @Override
     public void visitLineNumber(int line, Label start) {
-        if(line != 0) {
-            this.line = line;
-            mv.visitLdcInsn(mName);
+    	this.line = line;
+        if (0 != line) {
+            mv.visitLdcInsn(cName);
             mv.visitLdcInsn(line);
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "ashishyugeshjavier/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "group2/CoverageCollection", "visitLine", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
+            super.visitLineNumber(line, start);
         }
-        super.visitLineNumber(line, start);
     }
 
     @Override
-    public void visitLabel(Label label) {
-        if(line != 0) {
-            mv.visitLdcInsn(mName);
-            mv.visitLdcInsn(line);
-            mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;", false);
-            mv.visitMethodInsn(INVOKESTATIC, "ashishyugeshjavier/CoverageCollection", "lineinfo", "(Ljava/lang/String;Ljava/lang/Integer;)V", false);
-        }
-        super.visitLabel(label);
+    public void visitEnd() {
+        super.visitEnd();
     }
 }
